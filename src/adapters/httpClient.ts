@@ -5,7 +5,7 @@ export class AxiosHttpAdapter {
   private privateBackendInstance: AxiosInstance;
 
   constructor() {
-    const baseURL: string = import.meta.env.VITE_API_URL;
+    const baseURL: string = "https://server-redes-production.up.railway.app:3333";
 
     this.privateBackendInstance = axios.create({
       baseURL,
