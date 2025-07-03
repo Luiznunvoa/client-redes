@@ -23,7 +23,7 @@ export const ValidateSelectedProfile = ({ children }: { children: ReactNode }) =
   }, [getProfile]);
 
   if (!authenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (loading || !user) {
@@ -33,7 +33,7 @@ export const ValidateSelectedProfile = ({ children }: { children: ReactNode }) =
   if (error) {
     alert("erro inesperado");
     useSessionStore.getState().reset();
-    navigate("/login");
+    navigate("/");
     return null;
   }
 
