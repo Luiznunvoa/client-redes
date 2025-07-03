@@ -15,7 +15,7 @@ export function BrowserRouter() {
       ),
       children: [
         { 
-          path: "/login",
+          path: "/",
           element: <Login />,
         },
         {
@@ -32,7 +32,7 @@ export function BrowserRouter() {
       ),
       children: [
         {
-          path: "/",
+          path: "/home",
           element: <Home />
         },
       ],
