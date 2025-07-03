@@ -7,7 +7,7 @@ export const VerifyUserAuthentication = ({ children }: { children: ReactNode }) 
   const authenticated = useSessionStore((store) => store.authenticated);
 
   if (authenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   return <>{children}</>;
