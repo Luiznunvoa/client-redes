@@ -5,7 +5,7 @@ export class AxiosHttpAdapter {
   private privateBackendInstance: AxiosInstance;
 
   constructor() {
-    const baseURL: string = "https://server-redes-production.up.railway.app:3333";
+    const baseURL: string = "https://server-redes-production.up.railway.app";
 
     this.privateBackendInstance = axios.create({
       baseURL,
