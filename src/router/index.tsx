@@ -37,7 +37,7 @@ export function BrowserRouter() {
         },
       ],
     },
-  ]);
+  ], { basename: "/client-redes/" });
 
   return <RouterProvider router={router} />;
 }
