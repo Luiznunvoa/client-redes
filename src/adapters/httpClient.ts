@@ -43,7 +43,7 @@ export class AxiosHttpAdapter {
       (error: any): Promise<any> => {
         if (error.response && error.response.status === 401) {
           useSessionStore.getState().reset()
-          window.location.href = "/login";
+          // window.location.href = "/";
         }
         return Promise.reject(error);
       }
