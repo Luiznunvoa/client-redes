@@ -1,48 +1,59 @@
 # Projeto Cliente - Redes de Computadores
 
-Este projeto é o cliente web desenvolvido para a disciplina de Redes de Computadores, com o objetivo de demonstrar a comunicação HTTP entre um cliente e um servidor. Ele simula um sistema de chat, onde a interação com o backend é realizada através de requisições HTTP.
+Este projeto é o **cliente web** para uma aplicação de chat em tempo real, desenvolvida para a disciplina de Redes de Computadores da Universidade Federal Fluminense. Ele se conecta a uma API backend para fornecer funcionalidades de chat, demonstrando a comunicação HTTP entre cliente e servidor.
 
-## Estrutura do Projeto
+## Funcionalidades
 
-A estrutura do projeto segue uma organização modular, com componentes, serviços, hooks e adaptadores bem definidos para facilitar a manutenção e o entendimento do fluxo de dados.
+- **Autenticação de Usuários**: Faça login e registre-se de forma segura.
+- **Gerenciamento de Conversas**: Crie e selecione canais de conversa.
+- **Mensagens em Tempo Real**: Envie e visualize mensagens instantaneamente.
+- **Gerenciamento de Sessão**: O estado da sessão do usuário é gerenciado de forma eficiente.
+- **Integração com API**: Comunicação robusta com o backend para todas as operações.
+
+## Tecnologias Utilizadas
+
+O projeto foi construído com uma stack moderna e performática:
+
+- **[React](https://react.dev/)**: Biblioteca para construção de interfaces de usuário.
+- **[Vite](https://vitejs.dev/)**: Ferramenta de build e desenvolvimento frontend.
+- **[TypeScript](https://www.typescriptlang.org/)**: Superset de JavaScript com tipagem estática.
+
+## Como executar localmente
+
+Para executar o projeto localmente, siga os seguintes passos:
+
+1. **Clone o repositório:**
+
+   ```bash
+   git clone https://github.com/Luiznunvoa/client-redes
+   ```
+
+2. **Instale as dependências:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Inicie o servidor de desenvolvimento:**
+
+   ```bash
+   npm run dev
+   ```
+
+O cliente estará disponível em `http://localhost:5173` (porta padrão do Vite).
+
+## Back-end Implementado para este Cliente
+
+- [Server-Redes](https://github.com/Luiznunvoa/server-redes)
 
 ## Comunicação HTTP e Integração com o Servidor
 
-O coração da comunicação HTTP neste projeto reside no arquivo `src/adapters/httpClient.ts`. Este módulo é responsável por configurar e gerenciar as requisições HTTP para o servidor backend.
+O coração da comunicação HTTP neste projeto reside no arquivo `src/adapters/httpClient.ts`. Este módulo, utilizando `axios`, gerencia todas as requisições para o servidor backend.
 
-### `src/adapters/httpClient.ts`
+-   **Instância do Axios**: Uma instância do Axios é configurada com a `baseURL` do servidor de produção: `https://server-redes-production.up.railway.app`(péssima prática).
 
-Este arquivo utiliza a biblioteca `axios` para realizar as requisições HTTP. Abaixo estão os pontos mais importantes:
+-   **Interceptors**:
+    -   **Requisição**: Antes de cada requisição, um interceptor anexa o `accessToken` (se disponível) ao cabeçalho `Authorization`, garantindo que o usuário esteja autenticado.
+    -   **Resposta**: Um interceptor de resposta trata erros de autenticação (`status 401`), resetando a sessão do usuário para proteger os dados e garantir a consistência do estado.
 
--   **Instância do Axios**: Uma instância privada do Axios (`privateBackendInstance`) é criada com uma `baseURL` definida para o servidor de produção:
-    ```typescript
-    const baseURL: string = "https://server-redes-production.up.railway.app";
-    this.privateBackendInstance = axios.create({
-      baseURL,
-    });
-    ```
-    Esta URL aponta para o servidor backend da aplicação, que é o foco da integração de redes.
-
--   **Interceptors (Interceptadores)**:
-    -   **Requisição (`request.use`)**: Antes de cada requisição ser enviada, um interceptador verifica se existe um `accessToken` na `useSessionStore`. Se houver, ele é adicionado ao cabeçalho `Authorization` como um token `Bearer`. Isso é fundamental para a autenticação e autorização das requisições, garantindo que apenas usuários autenticados possam acessar certos recursos do servidor.
-        ```typescript
-        const token = useSessionStore.getState().accessToken;
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        ```
-    -   **Resposta (`response.use`)**: Um interceptador de resposta é configurado para tratar erros globalmente. Especificamente, se uma resposta de erro tiver o status `401` (Não Autorizado), a sessão do usuário é resetada (`useSessionStore.getState().reset()`). Isso garante que o cliente reaja apropriadamente a problemas de autenticação, direcionando o usuário para a tela de login ou limpando dados sensíveis.
-        ```typescript
-        if (error.response && error.response.status === 401) {
-          useSessionStore.getState().reset()
-          // window.location.href = "/";
-        }
-        ```
-
--   **Método `requestPrivateBackend`**: Este método encapsula a lógica de fazer requisições HTTP usando a instância configurada do Axios. Ele lida com a execução da requisição e o tratamento básico de erros, retornando os dados da resposta ou lançando um erro em caso de falha.
-
-### Integração com o Servidor
-
-Os serviços (`src/services/*.ts`) utilizam o `httpClient` para interagir com as APIs do servidor. Por exemplo, `conversationService.ts` ou `userService.ts` farão chamadas para o backend para buscar, criar ou atualizar dados, utilizando a infraestrutura de comunicação definida em `httpClient.ts`.
-
-Essa arquitetura garante que toda a comunicação com o servidor seja centralizada e padronizada, facilitando a depuração e a aplicação de políticas de segurança e autenticação de forma consistente em toda a aplicação cliente. A utilização de interceptadores é um exemplo prático de como o controle sobre o fluxo de requisições e respostas HTTP pode ser implementado em uma aplicação real, um conceito importante em redes de computadores.
+Essa arquitetura centraliza a comunicação com o servidor, facilitando a manutenção e a aplicação de políticas de segurança de forma consistente.
